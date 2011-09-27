@@ -1,9 +1,11 @@
 require 'spree_core'
-require 'import_products_hooks'
+#require 'import_products_hooks'
 require 'delayed_job'
+require 'resque'
 
 module ImportProducts
   class Engine < Rails::Engine
+    engine_name 'import_products'
 
     config.autoload_paths += %W(#{config.root}/lib)
 

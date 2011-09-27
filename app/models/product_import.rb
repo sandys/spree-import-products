@@ -49,7 +49,6 @@ class ProductImport < ActiveRecord::Base
           product_information[key] = row[value]
         end
 
-
         #Manually set available_on if it is not already set
         product_information[:available_on] = DateTime.now - 1.day if product_information[:available_on].nil?
 
@@ -62,7 +61,7 @@ class ProductImport < ActiveRecord::Base
 
         if IMPORT_PRODUCT_SETTINGS[:create_variants]
           field = IMPORT_PRODUCT_SETTINGS[:variant_comparator_field].to_s
-          if p = Product.find(:first, :conditions => ["#{field} = ?", row[col[field.to_sym]]])
+          if p = Product.find(:first, :conditions => ["#{Product.connection.quote_column_name(field)} = ?", row[col[field.to_sym]]])
             p.update_attribute(:deleted_at, nil) if p.deleted_at #Un-delete product if it is there
             p.variants.each { |variant| variant.update_attribute(:deleted_at, nil) }
             create_variant_for(p, :with => product_information)
