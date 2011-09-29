@@ -76,7 +76,9 @@ INSTALLATION
 1. Add the gem to your Gemfile, and run bundle install.
     `gem 'import_products', :git => 'git://github.com/joshmcarthur/spree-import-products.git'` then `bundle install`
 
-2. 'Install' the extension - `rake railties:install:migrations FROM=import_products`
+2. 'Install' the extension :
+    2.1 `ruby script/rails g import_products:install  # to copy yml files to correct locations`
+    2.2 `rake railties:install:migrations FROM=import_products # to copy migrations`
 
 3. Do a db migration. `rake db:migrate`
 
