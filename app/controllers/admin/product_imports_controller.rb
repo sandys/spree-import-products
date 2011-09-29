@@ -15,8 +15,14 @@ class Admin::ProductImportsController < Admin::BaseController
 
   def create
     @product_import = ProductImport.create(params[:product_import])
-    #Delayed::Job.enqueue ImportProducts::ImportJob.new(@product_import, @current_user)
-    Resque.enqueue  ImportProducts::ImportJobResque, @product_import.id, @current_user.id
+    
+    if  ImportProducts::Engine.config.spree_import_products_backend == :resque
+      Resque.enqueue  ImportProducts::ImportJobResque, @product_import.id, @current_user.id
+    elsif ImportProducts::Engine.config.spree_import_products_backend == :delayed_job 
+      Delayed::Job.enqueue ImportProducts::ImportJob.new(@product_import, @current_user)
+    else 
+      raise "No configured backend"
+    end
     flash[:notice] = t('product_import_processing')
     redirect_to admin_product_imports_path
   end

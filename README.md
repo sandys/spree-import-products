@@ -65,6 +65,8 @@ All the configuration for this extension is inside the initializer generated whe
 
 In most cases, it's unlikely you will need to change defaults, but it's there is you need it.
 
+*Switchable backends* : please add `ImportProducts::Engine.config.spree_import_products_backend = :resque` or `ImportProducts::Engine.config.spree_import_products_backend = :delayed_job` at the end of your #{RAILS_ROOT}/config/application.rb.
+The import jobs will not run without - make sure you have the pre-requisites (and the migrations in case of delayed_job) working as mentioned above.
 
 
 TODOs
